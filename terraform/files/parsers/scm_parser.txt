@@ -1,0 +1,39 @@
+let EventData = Event
+| where Source == "Service Control Manager"
+| extend RenderedDescription = tostring(split(RenderedDescription, ":")[0])
+| project TimeGenerated,
+    Type,
+    Source,
+    EventID,
+    Computer,
+    UserName,
+    EventData,
+    RenderedDescription
+| extend EvData = parse_xml(EventData)
+| extend EventDetail = EvData.DataItem.EventData.Data
+| project-away EventData,
+    EvData;
+let SERVICE_CREATION_7045=() {
+let processEvents = EventData
+| where EventID == 7045
+| extend ServiceName = EventDetail[0]["#text"]
+| extend ImagePath = EventDetail[1]["#text"]
+| extend ServiceType = EventDetail[2]["#text"]
+| extend StartType = EventDetail[3]["#text"]
+| extend AccountName = EventDetail[4]["#text"]
+| project-away EventDetail;
+processEvents
+};
+SERVICE_CREATION_7045
+| project
+TimeGenerated,
+Type,
+Source,
+EventID,
+Computer,
+UserName,
+StartType,
+ServiceType,
+ImagePath,
+ServiceName,
+AccountName

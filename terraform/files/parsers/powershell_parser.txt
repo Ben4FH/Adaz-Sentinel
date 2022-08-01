@@ -1,0 +1,142 @@
+let EventData = Event
+| where Source in ("Microsoft-Windows-PowerShell","PowerShell")
+| extend RenderedDescription = tostring(split(RenderedDescription, ":")[0])
+| project TimeGenerated,
+    Source,
+    EventID,
+    Computer,
+    UserName,
+    EventData,
+    RenderedDescription
+| extend EvData = parse_xml(EventData)
+| extend EventDetail = EvData.DataItem.EventData.Data
+| project-away EventData,
+    EvData;
+let POWERSHELL_PIPELINE_4103=() {
+let processEvents = EventData
+| where EventID == 4103
+| extend ContextInfo = EventDetail[0]["#text"]
+| extend Payload = EventDetail[2]["#text"]
+| extend Lines = split(EventDetail.[0].["#text"], "         ")
+| extend Severity = split(Lines.[0], "=").[1]
+| extend HostName = split(Lines.[1], "=").[1]
+| extend HostVersion = split(Lines.[2], "=").[1]
+| extend HostID = split(Lines.[3], "=").[1]
+| extend HostApplication = split(Lines.[4], "=").[1]
+| extend EngineVersion = split(Lines.[5], "=").[1]
+| extend RunspaceID = split(Lines.[6], "=").[1]
+| extend PipelineID = split(Lines.[7], "=").[1]
+| extend CommandName = split(Lines.[8], "=").[1]
+| extend CommandType = split(Lines.[9], "=").[1]
+| extend ScriptName = split(Lines.[10], "=").[1]
+| extend CommandPath = split(Lines.[11], "=").[1]
+| extend SequenceNumber = split(Lines.[12], "=").[1]
+| extend User = split(Lines.[13], "=").[1]
+| extend ConnectedUser = split(Lines.[14], "=").[1]
+| extend ShellID = split(Lines.[15], "=").[1]
+| project-away EventDetail, Lines
+;
+processEvents;
+};
+let POWERSHELL_REMOTE_COMMAND_4104=() {
+let processEvents = EventData
+| where EventID == 4104
+| extend MessageNumber = EventDetail.[0].["#text"]
+| extend MessageTotal = EventDetail.[1].["#text"]
+| extend ScriptBlockText = tostring(EventDetail.[2].["#text"])
+| extend ScriptBlockID = EventDetail.[3].["#text"]
+| extend Path = EventDetail.[4].["#text"]
+| project-away EventDetail
+;
+processEvents;
+};
+let POWERSHELL_CLASSIC_START_400=() {
+let processEvents = EventData
+| where EventID == 400
+| extend Lines=split(EventDetail[2]," 	")
+| extend NewEngineState = split(Lines.[0], "=").[1]
+| extend PreviousEngineState = split(Lines.[1], "=").[1]
+| extend SequenceNumber = split(Lines.[2], "=").[1]
+| extend HostName = split(Lines.[3], "=").[1]
+| extend HostVersion = split(Lines.[4], "=").[1]
+| extend HostId = split(Lines.[5], "=").[1]
+| extend HostApplication = split(Lines.[6], "=").[1]
+| extend EngineVersion = split(Lines.[7], "=").[1]
+| extend RunspaceId = split(Lines.[8], "=").[1]
+| extend PipelineId = split(Lines.[9], "=").[1]
+| extend CommandName = split(Lines.[10], "=").[1]
+| extend CommandTypes = split(Lines.[11], "=").[1]
+| extend ScriptNames = split(Lines.[12], "=").[1]
+| extend CommandPath = split(Lines.[13], "=").[1]
+| extend CommandLine = split(Lines.[14], "=").[1]
+| project-away EventDetail, Lines
+;
+processEvents;
+};
+let POWERSHELL_PROVIDER_START_600=() {
+let processEvents = EventData
+| where EventID == 600
+| extend Lines=split(EventDetail[2]," 	")
+| extend ProviderName = split(Lines.[0], "=").[1]
+| extend NewProviderState = split(Lines.[1], "=").[1]
+| extend SequenceNumber = split(Lines.[2], "=").[1]
+| extend HostName = split(Lines.[3], "=").[1]
+| extend HostVersion = split(Lines.[4], "=").[1]
+| extend HostId = split(Lines.[5], "=").[1]
+| extend HostApplication = split(Lines.[6], "=").[1]
+| extend EngineVersion = split(Lines.[7], "=").[1]
+| extend RunspaceId = split(Lines.[8], "=").[1]
+| extend PipelineId = split(Lines.[9], "=").[1]
+| extend CommandName = split(Lines.[10], "=").[1]
+| extend CommandType = split(Lines.[11], "=").[1]
+| extend ScriptName = split(Lines.[12], "=").[1]
+| extend CommandPath = split(Lines.[13], "=").[1]
+| extend CommandLine = split(Lines.[14], "=").[1]
+| project-away EventDetail, Lines
+;
+processEvents;
+};
+(union isfuzzy=true
+POWERSHELL_PIPELINE_4103,
+POWERSHELL_REMOTE_COMMAND_4104,
+POWERSHELL_CLASSIC_START_400,
+POWERSHELL_PROVIDER_START_600
+)
+| extend Details = column_ifexists("Details", ""), 
+RuleName = column_ifexists("RuleName", ""),
+PreviousCreationUtcTime=column_ifexists("PreviousCreationUtcTime", ""),
+Hashes = column_ifexists("Hashes", ""),
+Hash = column_ifexists("Hash", "")
+| project TimeGenerated,
+Source, 
+Computer, 
+UserName, 
+EventID,
+ContextInfo,
+Payload, 
+Severity,
+HostName,
+HostVersion,
+HostID,
+HostApplication,
+EngineVersion,
+RunspaceID,
+PipelineID,
+CommandName,
+CommandType,
+ScriptName,
+CommandLine,
+CommandPath,
+SequenceNumber,
+User,
+ConnectedUser,
+ShellID,
+MessageNumber,
+MessageTotal,
+ScriptBlockText,
+ScriptBlockID,
+Path,
+NewEngineState,
+PreviousEngineState,
+ProviderName,
+NewProviderState

@@ -1,0 +1,12 @@
+SecurityEvent
+// Query Author: reprise99
+| where TimeGenerated > ago (1d)
+| where EventID == "4624"
+| where LogonType == 10
+| where SubjectDomainName == TargetDomainName
+| summarize
+    ['Distinct device logon count']=dcount(Computer),
+    ['List of devices']=make_set(Computer)
+    by tolower(Account), bin(TimeGenerated, 30m)
+//Find accounts that have logged on to 3 or more unique devices in less than 30 minutes
+| where ['Distinct device logon count'] >= 3

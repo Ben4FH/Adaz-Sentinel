@@ -1,33 +1,21 @@
 # Troubleshooting
 
-## RDP/Kibana is unreachable
+## You get an error regarding the failed creation of 1 or more alert rules.
+---
 
-By default, only your public outgoing IP (as returned by canihazip.com) is allowed to access your lab. This is configured on the Network Security Groups attached to VM network interfaces.
+- If this happens, there are a few things you can do:
 
-Make sure your IP didn't change compared to when you last ran `terraform apply`. If it did change, just run `terraform apply` and the whitelisted IP will be automatically updated for you.
+1. Read the error message to see if a certain column name is causing the issue
+    - If the column name does not exist in the table which the rule uses, you may need to adjust the ala-new.yml file to map it to an existing column name. Please see the [sigmac docs](https://github.com/SigmaHQ/sigma/blob/master/tools/README.md) for more information about this. You can also raise an issue and I will take a look.
 
-## No logs in Kibana
+2. If there was no mention of a specific column then check the .rule file in the `converted` folder for this rule and see if there are any obvious issues with the KQL. It may be that the regex is invalid or a character needed to be escaped. If this is the case, please raise an issue and i will check.
 
-The logs flow from workstations to the domain controller via the Windows Event Forwarding protocol (on top of WinRM). Once on the domain controller, Winlogbeat sends them to Elasticsearch.
+3. If the sigma rule can be changed to fix the issue, please do so and move it to the `override` folder
 
-- Check if the logs of the workstations are in the `Forwarded Events` event log of the domain controller. If not, you'll need to troubleshoot the WEF - see [WEF troubleshooting guide](./wef_troubleshooting.md)
+4. If unable to fix the issue, add the rule filename (with no extension) to the `failed.csv` file
+...
 
-- Check the logs of Winlogbeat on the domain controller. They are located under `C:\ProgramData\Elastic\Beats\winlogbeat\logs`
+## Ansible fails to read from the inventory
+---
 
-- Check if Winlogbeat is running (`Get-Service winlogbeat`)
-    
-## "Operation could not be completed as it results in exceeding approved Total Regional Cores quota"
-
-You might run into this error when running `terraform apply`. The full error looks like this:
-
-```
-Error: compute.VirtualMachinesClient#CreateOrUpdate: Failure sending request: StatusCode=0 -- Original Error: autorest/azure: Service returned an error. Status=<nil> Code="OperationNotAllowed" Message="Ope
-ration could not be completed as it results in exceeding approved Total Regional Cores quota. Additional details - Deployment Model: Resource Manager, Location: westeurope, Current Limit: 4, Current Usage:
-4, Additional Required: 1, (Minimum) New Limit Required: 5. Submit a request for Quota increase at https://aka.ms/ProdportalCRP/?#create/Microsoft.Support/Parameters/%7B%22subId%22:%221c7e10d2-091b-4384-8
-c75-b6d50232464a%22,%22pesId%22:%2206bfd9d3-516b-d5c6-5802-169c800dec89%22,%22supportTopicId%22:%22e12e3d1d-7fa0-af33-c6d0-3c50df9658a3%22%7D by specifying parameters listed in the ‘Details’ section for de
-ployment to succeed. Please read more about quota limits at https://docs.microsoft.com/en-us/azure/azure-supportability/regional-quota-requests." 
-```
-
-If you are using a Free Trial subscription, you will need to upgrade it to a Pay As You Go subscription or to reduce the number of cores of the lab you spin up. Azure currently allows at most 5 vCPUs per region with Free Trial subscriptions
-
-If not, follow the link included in the error message to request a quota increase (Free Trial subscriptions are not eligible for this).
+- I noticed this once in testing, but haven't been able to replicate the issue. Destroying and rebuilding the lab fixed the issue for me.

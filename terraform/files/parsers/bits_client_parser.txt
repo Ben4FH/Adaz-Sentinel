@@ -1,0 +1,133 @@
+let EventData = Event
+| where Source == "Microsoft-Windows-Bits-Client"
+| extend RenderedDescription = tostring(split(RenderedDescription, ":")[0])
+| project TimeGenerated,
+    Source,
+    EventID,
+    Computer,
+    UserName,
+    EventData,
+    RenderedDescription
+| extend EvData = parse_xml(EventData)
+| extend EventDetail = EvData.DataItem.EventData.Data
+| project-away EventData,
+    EvData;
+let JOB_CREATED_3=() {
+let processEvents = EventData
+| where EventID == 3
+| extend jobTitle = EventDetail[0]["#text"]
+| extend jobId = EventDetail[1]["#text"]
+| extend jobOwner = EventDetail[2]["#text"]
+| extend processPath = EventDetail[3]["#text"]
+| extend processId = EventDetail[4]["#text"]
+| extend ClientProcessStartKey = EventDetail[5]["#text"]
+| project-away EventDetail;
+processEvents;
+};
+let JOB_COMPLETE_4=() {
+let processEvents = EventData
+| where EventID == 4
+| extend User = EventDetail[0]["#text"]
+| extend jobTitle = EventDetail[1]["#text"]
+| extend jobId = EventDetail[2]["#text"]
+| extend jobOwner = EventDetail[3]["#text"]
+| extend fileCount = EventDetail[4]["#text"]
+| extend bytesTransferred = EventDetail[5]["#text"]
+| extend bytesTransferredFromPeer = EventDetail[6]["#text"]
+| project-away EventDetail;
+processEvents;
+};
+let JOB_STARTED_59=() {
+let processEvents = EventData
+| where EventID == 59
+| extend transferId = EventDetail[0]["#text"]
+| extend name = EventDetail[1]["#text"]
+| extend id = EventDetail[2]["#text"]
+| extend url = EventDetail[3]["#text"]
+| extend peer = EventDetail[4]["#text"]
+| extend fileTime = EventDetail[5]["#text"]
+| extend fileLength = EventDetail[6]["#text"]
+| extend bytesTotal = EventDetail[7]["#text"]
+| extend bytesTransferred = EventDetail[8]["#text"]
+| extend bytesTransferredFromPeer = EventDetail[9]["#text"]
+| project-away EventDetail;
+processEvents;
+};
+let JOB_STOPPED_60=() {
+let processEvents = EventData
+| where EventID == 60
+| extend transferId = EventDetail[0]["#text"]
+| extend name = EventDetail[1]["#text"]
+| extend id = EventDetail[2]["#text"]
+| extend url = EventDetail[3]["#text"]
+| extend peer = EventDetail[4]["#text"]
+| extend hr = EventDetail[5]["#text"]
+| extend fileTime = EventDetail[6]["#text"]
+| extend fileLength = EventDetail[7]["#text"]
+| extend bytesTotal = EventDetail[8]["#text"]
+| extend bytesTransferred = EventDetail[9]["#text"]
+| extend proxy = EventDetail[10]["#text"]
+| extend peerProtocolFlags = EventDetail[11]["#text"]
+| extend bytesTransferredFromPeer = EventDetail[12]["#text"]
+| extend additionalInfoHr = EventDetail[13]["#text"]
+| extend PeerContextInfo = EventDetail[14]["#text"]
+| extend bandwidthLimit = EventDetail[15]["#text"]
+| extend ignoreBandwidthLimitsOnLan = EventDetail[16]["#text"]
+| project-away EventDetail;
+processEvents;
+};
+let JOB_16403=() {
+let processEvents = EventData
+| where EventID == 16403
+| extend User = EventDetail[0]["#text"]
+| extend jobTitle = EventDetail[1]["#text"]
+| extend jobId = EventDetail[2]["#text"]
+| extend jobOwner = EventDetail[3]["#text"]
+| extend fileCount = EventDetail[4]["#text"]
+| extend RemoteName = EventDetail[5]["#text"]
+| extend LocalName = EventDetail[5]["#text"]
+| extend processId = EventDetail[5]["#text"]
+| extend ClientProcessStartKey = EventDetail[5]["#text"]
+| project-away EventDetail;
+processEvents;
+};
+(union isfuzzy=true
+JOB_CREATED_3,
+JOB_COMPLETE_4,
+JOB_STARTED_59,
+JOB_STOPPED_60,
+JOB_16403
+)
+| project
+TimeGenerated,
+Source,
+EventID,
+Computer,
+UserName,
+jobTitle,
+jobId,
+jobOwner,
+fileCount,
+RemoteName,
+LocalName,
+processId,
+ClientProcessStartKey,
+transferId,
+name,
+id,
+url,
+peer,
+hr,
+fileTime,
+fileLength,
+bytesTotal,
+bytesTransferred,
+proxy,
+peerProtocolFlags,
+bytesTransferredFromPeer,
+additionalInfoHr,
+PeerContextInfo,
+bandwidthLimit,
+ignoreBandwidthLimitsOnLan,
+processPath,
+User

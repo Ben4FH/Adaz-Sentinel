@@ -58,7 +58,8 @@ resource "azurerm_virtual_machine" "workstation" {
   }
   os_profile_windows_config {
     enable_automatic_upgrades = false
-    timezone                  = "Central European Standard Time"
+    provision_vm_agent        = true
+    timezone                  = "UTC"
     winrm {
       protocol = "HTTP"
     }
@@ -69,11 +70,26 @@ resource "azurerm_virtual_machine" "workstation" {
   }
 }
 
+# Install tools
+resource "null_resource" "install_tools_on_workstation" {
 
+provisioner "local-exec" {
+  working_dir = "${path.root}/../ansible"
+  command     = "/bin/bash -c 'source venv/bin/activate && env no_proxy='*' ansible-playbook -i ./inventory_azure_rm.yml workstations.yml --skip-tags=domain -v'"
+}
+
+depends_on = [
+  azurerm_virtual_machine_extension.mma-workstation
+]
+
+}
+
+# Join workstations to the domain & create local users
 resource "null_resource" "provision_workstation_once_dc_has_been_created" {
+
   provisioner "local-exec" {
     working_dir = "${path.root}/../ansible"
-    command     = "/bin/bash -c 'source venv/bin/activate && ansible-playbook workstations.yml -v'"
+    command     = "/bin/bash -c 'source venv/bin/activate && env no_proxy='*' ansible-playbook -i ./inventory_azure_rm.yml workstations.yml --tags=common,domain -v'"
   }
 
   # Note: the dependance on 'azurerm_virtual_machine.workstation' applies to *all* resources created from this block
@@ -81,6 +97,6 @@ resource "null_resource" "provision_workstation_once_dc_has_been_created" {
   # c.f. https://github.com/hashicorp/terraform/issues/15285
   depends_on = [
     azurerm_virtual_machine.dc,
-    azurerm_virtual_machine.workstation
+    null_resource.install_tools_on_workstation
   ]
 }

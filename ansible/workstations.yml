@@ -4,7 +4,4 @@
   gather_facts: no
   roles:
   - domain-member
-  - windows-base
-  - wef-client
   - sysmon
-  - logging-base

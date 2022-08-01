@@ -1,3 +1,0 @@
-- name: gpupdate
-  win_command: gpupdate /force
-  tags: wef

@@ -1,0 +1,88 @@
+Rule,Notes,Error
+win_software_atera_rmm_agent_install,needs application logs," Failed to resolve entity 'windows';\"""""
+win_system_application_sysmon_crash,needs application popup parsing," 'where' operator: Failed to resolve column or scalar expression named 'Caption';\"""""
+win_susp_dns_config,needs dns-server logs," Failed to resolve entity 'windows';\"""""
+win_mssql_add_sysadmin_account,needs mssqlserver logs," Failed to resolve entity 'windows';\"""""
+win_mssql_xp_cmdshell_audit_log,needs mssqlserver logs," Failed to resolve entity 'windows';\"""""
+win_ntfs_vuln_exploit,needs ntfs logs," 'where' operator: Failed to resolve column or scalar expression named 'Origin';\"""""
+win_codeintegrity_failed_driver_load,Needs parsing of code integrity event log," Failed to resolve entity 'windows';\"""""
+win_exchange_proxyshell_remove_mailbox_export,needs parsing of exchange logs," Failed to resolve entity 'windows';\"""""
+win_exchange_transportagent_failed,needs parsing of exchange logs," Failed to resolve entity 'windows';\"""""
+win_set_oabvirtualdirectory_externalurl,needs parsing of exchange logs," Failed to resolve entity 'windows';\"""""
+sysmon_susp_remote_thread,needs parsing of sourceparentimage field," 'where' operator: Failed to resolve scalar expression named 'SourceParentImage';\"""""
+win_defender_amsi_trigger,needs parsing of windows defender log," Failed to resolve entity 'windows';\"""""
+win_defender_history_delete,needs parsing of windows defender log," Failed to resolve entity 'windows';\"""""
+win_defender_psexec_wmi_asr,needs parsing of windows defender log," Failed to resolve entity 'windows';\"""""
+win_defender_tamper_protection_trigger,needs parsing of windows defender log," Failed to resolve entity 'windows';\"""""
+win_defender_threat,needs parsing of windows defender log," Failed to resolve entity 'windows';\"""""
+win_exploit_cve_2021_1675_printspooler,needs printer service logs," Failed to resolve entity 'windows';\"""""
+win_hybridconnectionmgr_svc_running,needs servicebus-client logs," Failed to resolve entity 'windows';\"""""
+driver_load_vuln_avast_anti_rootkit_driver,failed to convert, Backend does not support map values of type <class 'bool'>
+win_mssql_xp_cmdshell_change, do not ingest sql logs,
+win_mssql_disable_audit_settings, do not ingest sql logs,
+win_alert_mimikatz_keywords, no keyword support,	Left and right side of the logical expression must be Boolean
+win_susp_sam_dump,parsing error,Left and right side of the logical expression must be Boolean
+win_alert_lsass_access, needs windefend parsing,
+win_vul_cve_2021_41379, needs application logs,
+posh_ps_susp_invocation_specific, parsing error,Query could not be parsed at 'https'
+win_exchange_cve_2021_42321, needs exchange logs,
+win_mssql_sp_procoption_set,needs sql logs,
+file_event_win_powershell_exploit_scripts,query too long,
+win_susp_msmpeng_crash,needs application event logs,
+win_apt_gallium,needs dns server logs,
+win_vul_cve_2020_0688,needs application logs,
+proc_creation_win_dnscat2_powershell_implementation,parsing issue,Field mappings in aggregations must be single valued
+win_exploit_cve_2021_1675_printspooler_operational,parsing issue,Left and right side of the logical expression must be Boolean
+win_exchange_proxyshell_mailbox_export, needs exchange logs,
+win_adcs_certificate_template_configuration_vulnerability_eku, need to parse 4898 & 4899 events,
+win_exchange_proxyshell_certificate_generation,needs exchange logs,
+proc_creation_win_mal_darkside_ransomware,single quote parsing issue,Query could not be parsed at '0x' on line [622,137]
+win_exchange_proxylogon_oabvirtualdir,needs exchange logs,
+win_user_couldnt_call_privileged_service_lsaregisterlogonprocess,no keyword support,
+sysmon_powershell_code_injection,SourceParentImage is not a valid field for this event,
+proc_creation_win_invoke_obfuscation_obfuscated_iex_commandline,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_powershell_cmdline_special_characters,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_invoke_obfuscation_var,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+pipe_created_mal_cobaltstrike_re,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_invoke_obfuscation_clip,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_pm_invoke_obfuscation_obfuscated_iex,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_susp_powershell_iex_patterns,parsing error,Query could not be parsed at 'iex' on line [1,198]\",\"line\":1,\"pos\":198,\"token\":\"iex\"}}}};"
+win_invoke_obfuscation_obfuscated_iex_services,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_susp_crackmapexec_flags,parsing error,Query could not be parsed at 'NTHASH' on line [1,380]\",\"line\":1,\"pos\":380,\"token\":\"NTHASH\"}}}};"
+win_invoke_obfuscation_var_services,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+win_security_metasploit_or_impacket_smb_psexec_service_install,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_ps_invoke_obfuscation_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_ps_invoke_obfuscation_via_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_ps_invoke_obfuscation_var,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_access_win_cobaltstrike_bof_injection_pattern,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_pm_invoke_obfuscation_via_var,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_ps_invoke_obfuscation_via_var,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_pm_invoke_obfuscation_via_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_schtasks_powershell_windowsapps_execution,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+win_av_relevant_match,parsing error,Left and right side of the logical expression must be Boolean\"}}}};"
+win_invoke_obfuscation_via_var_services,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+win_possible_zerologon_exploitation_using_wellknown_tools,parsing error,Left and right side of the logical expression must be Boolean\"}}}};"
+win_invoke_obfuscation_obfuscated_iex_services_security,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_invoke_obfuscation_via_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_pm_invoke_obfuscation_clip,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_susp_emotet_rundll32_execution,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_run_powershell_script_from_input_stream,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_invoke_obfuscation_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_pm_susp_invocation_specific,parsing error,Query could not be parsed at 'https' on line [142,1360]\",\"line\":142,\"pos\":1360,\"token\":\"https\"}}}};"
+win_susp_service_installation_folder_pattern,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+win_invoke_obfuscation_via_stdin_services,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+sysmon_powershell_code_injection,parsing error,'where' operator: Failed to resolve column or scalar expression named 'SourceParentImage'\"}}}};"
+proc_creation_win_hack_rubeus,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+sysmon_config_modification_status,parsing error,Query could not be parsed at '..' on line [1,59]\",\"line\":1,\"pos\":59,\"token\":\"..\"}}}};"
+proc_creation_win_malware_notpetya,parsing error,Left and right side of the logical expression must be Boolean\"}}}};"
+posh_ps_invoke_obfuscation_clip,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+win_invoke_obfuscation_var_services_security,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_susp_gup,parsing error,Relop semantic error: SEM0420: Regex pattern is ill-formed: (?i).*\\\\\\\\Users\\\\\\\\.*\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Notepad++\\\\\\\\updater\\\\\\\\GUP\\\\.e...\"}}};"
+posh_ps_invoke_obfuscation_obfuscated_iex,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_pm_invoke_obfuscation_var,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_invoke_obfuscation_via_var,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+proc_creation_win_susp_crackmapexec_powershell_obfuscation,parsing error,Query could not be parsed at 'x' on line [1,279]\",\"line\":1,\"pos\":279,\"token\":\"x\"}}}};"
+win_user_couldnt_call_privileged_service_lsaregisterlogonprocess,parsing error,'where' operator: Failed to resolve column or scalar expression named 'Keywords'\"}}}};"
+win_invoke_obfuscation_stdin_services,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+posh_pm_invoke_obfuscation_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"
+win_invoke_obfuscation_via_var_services_security,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that, sorry. [line:position=0:0]\"}}};"

@@ -1,5 +1,7 @@
 terraform/*.tfstate
 terraform/*.tfstate.backup
 terraform/.terraform
+terraform/terraform.log
 ansible/venv
 ansible/*.retry
+.DS_STORE

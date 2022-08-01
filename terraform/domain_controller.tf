@@ -7,7 +7,7 @@ resource "azurerm_network_interface" "main" {
     name                          = "static"
     subnet_id                     = azurerm_subnet.servers.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = cidrhost(var.servers_subnet_cidr, 10)
+    private_ip_address            = local.domain.dc_ip
     public_ip_address_id          = azurerm_public_ip.main.id
   }
 }
@@ -19,7 +19,7 @@ resource "azurerm_network_interface_security_group_association" "dc" {
 
 
 resource "azurerm_virtual_machine" "dc" {
-  name                  = "domain-controller"
+  name                  = local.domain.dc_name
   location              = azurerm_resource_group.main.location
   resource_group_name   = azurerm_resource_group.main.name
   network_interface_ids = [azurerm_network_interface.main.id]
@@ -50,7 +50,8 @@ resource "azurerm_virtual_machine" "dc" {
   }
   os_profile_windows_config {
     enable_automatic_upgrades = false
-    timezone                  = "Central European Standard Time"
+    provision_vm_agent        = true
+    timezone                  = "UTC"
     winrm {
       protocol = "HTTP"
     }
@@ -59,12 +60,12 @@ resource "azurerm_virtual_machine" "dc" {
   # Provision base domain and DC
   provisioner "local-exec" {
     working_dir = "${path.root}/../ansible"
-    command     = "/bin/bash -c 'source venv/bin/activate && ansible-playbook domain-controllers.yml --tags=common,base -v'"
+    command     = "/bin/bash -c 'source venv/bin/activate && env no_proxy='*' ansible-playbook domain-controllers.yml --tags=common,base -v'"
   }
 
   provisioner "local-exec" {
     working_dir = "${path.root}/../ansible"
-    command     = "/bin/bash -c 'source venv/bin/activate && ansible-playbook domain-controllers.yml --tags=common,init -v'"
+    command     = "/bin/bash -c 'source venv/bin/activate && env no_proxy='*' ansible-playbook domain-controllers.yml --tags=common,init -v'"
   }
 
   tags = {
@@ -73,14 +74,28 @@ resource "azurerm_virtual_machine" "dc" {
 }
 
 # Provision rest of DC outside of the VM resource block to allow provisioning workstations concurrently
-resource "null_resource" "provision_rest_of_dc_after_creation" {
+resource "null_resource" "provision_rest_of_dc" {
+
   provisioner "local-exec" {
     working_dir = "${path.root}/../ansible"
-    command     = "/bin/bash -c 'source venv/bin/activate && ansible-playbook domain-controllers.yml --skip-tags=base,init -v'"
+    command     = "/bin/bash -c 'source venv/bin/activate && env no_proxy='*' ansible-playbook domain-controllers.yml --skip-tags=base,init,gpo -v'"
   }
 
   depends_on = [
-    azurerm_virtual_machine.dc,
-    azurerm_virtual_machine.es_kibana
+    azurerm_virtual_machine_extension.mma-dc
+  ]
+}
+
+# Import GPOs, link to OUs, run gpupdate on hosts
+resource "null_resource" "gpo" {
+
+  provisioner "local-exec" {
+    working_dir = "${path.root}/../ansible"
+    command     = "/bin/bash -c 'source venv/bin/activate && env no_proxy='*' ansible-playbook domain-controllers.yml --tags=common,gpo -v'"
+  }
+
+  depends_on = [
+   null_resource.provision_rest_of_dc,
+   null_resource.provision_workstation_once_dc_has_been_created
   ]
 }

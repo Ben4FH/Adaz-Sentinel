@@ -6,7 +6,7 @@
 
 - name: Read credentials from domain configuration file
   set_fact:
-    domain_controller_ips: "{{ lookup('flattened', groups['domain_controllers'] | map('extract', hostvars, ['private_ipv4_addresses']) | list) }}"
+    domain_controller_ips: "{{ domain.dc_ip }}"
     ansible_user: "{{ domain.default_local_admin.username }}"
     ansible_password: "{{ domain.default_local_admin.password }}"
   tags: common
@@ -16,44 +16,56 @@
   setup: {}
   tags: common
 
+- name: Set a hostname on the target
+  win_hostname:
+    name: "{{ ansible_env.COMPUTERNAME }}"
+
 - name: Set domain controllers as DNS servers
   win_dns_client:
     adapter_names: '*'
-    ipv4_addresses: "{{ domain_controller_ips }}"
+    ipv4_addresses: "{{ domain.dc_ip }}"
+  tags: domain
 
 - name: Ensure workstation is domain-joined
   win_domain_membership:
     dns_domain_name: "{{ domain.dns_name }}"
-    hostname: "{{ ansible_env.COMPUTERNAME }}"
+    #hostname: "{{ ansible_env.COMPUTERNAME }}"
     domain_admin_user: "{{ domain.initial_domain_admin.username }}@{{ domain.dns_name }}"
     domain_admin_password: "{{ domain.initial_domain_admin.password }}"
+    domain_ou_path: "OU=Workstations,DC={{ domain.dns_name.split('.')[0] | lower }},DC={{ domain.dns_name.split('.')[1] | lower }}"
     state: domain
   register: domain_state
+  tags: domain
 
 - name: Reboot machine if it has just joined the domain
   win_reboot: {}
   when: domain_state.reboot_required
+  tags: domain
 
 - name: Ensure domain users can RDP on any workstation
   win_group_membership:
     name: Remote Desktop Users
     members: "{{ domain.users | map(attribute='username') | list }}"
+  tags: domain
   # Note: currently, local users cannot be set as local admins from the YAML configuration
 
 - name: Read local users list from domain configuration file
   set_fact:
     local_users: "{{ domain.workstations | selectattr('name', 'equalto', ansible_env.COMPUTERNAME) | map(attribute='local_users') | reject('undefined') | select() | list }}"
-
+  tags: domain
+  
 - name: Ensure local users are created
   win_user:
     name: "{{ item.username is defined | ternary(item.username, item) }}"
     password: "{{ item.password is defined | ternary(item.password, item) }}"
   with_items: "{{ local_users }}"
   when: local_users|length > 0
+  tags: domain
 
 - name: Read local admins from domain configuration file
   set_fact:
     local_admins: "{{ domain.workstations | selectattr('name', 'equalto', ansible_env.COMPUTERNAME) | map(attribute='local_admins') | reject('undefined') | select() | list }}"
+  tags: domain
 
 - name: Ensure local administrator users are created
   win_group_membership:
@@ -61,20 +73,24 @@
     members: "{{ item }}"
   with_items: "{{ local_admins }}"
   when: local_admins|length > 0
+  tags: domain
 
 - name: Read Windows Firewall status from domain configuration file
   set_fact:
     windows_firewall_state: "{{ (domain.enable_windows_firewall is defined and domain.enable_windows_firewall is true) | ternary('enabled', 'disabled') }}"
+  tags: domain
 
 - name: "Ensure Windows firewall is {{ windows_firewall_state }}"
   win_firewall:
     profiles: [Domain, Private, Public]
     state: "{{ windows_firewall_state }}"
+  tags: domain
 
-# https://docs.microsoft.com/en-us/windows/client-management/mdm/policy-csp-privacy#privacy-disableprivacyexperience
-- name: Disable 'Choose your privacy settings' screen at first logon
-  win_regedit:
-    path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\OOBE
-    name: DisablePrivacyExperience
-    data: "1"
-    type: dword
+- name: Copy Install-Tools.ps1 and config files to workstations
+  win_copy:
+    src: ./files/
+    dest: C:\Tools\
+
+- name: Execute Install-Tools.ps1 on workstations
+  win_shell: C:\Tools\Install-Tools.ps1
+  ignore_errors: true

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RegistrySettings clsid="{A3CCFC41-DFDB-43a5-8D26-0FE8B954DA51}"><Registry clsid="{9CD4B2F4-923D-47f5-A062-E897DD1DAD50}" name="SearchboxTaskbarMode" status="SearchboxTaskbarMode" image="12" bypassErrors="1" changed="2022-07-24 14:05:33" uid="{ED5A352D-180C-4792-8922-2413D6AA9BEE}"><Properties action="U" displayDecimal="1" default="0" hive="HKEY_CURRENT_USER" key="SOFTWARE\Microsoft\Windows\CurrentVersion\Search" name="SearchboxTaskbarMode" type="REG_DWORD" value="00000000"/></Registry>
+	<Registry clsid="{9CD4B2F4-923D-47f5-A062-E897DD1DAD50}" name="DisablePrivacyExperience" status="DisablePrivacyExperience" image="12" changed="2022-07-24 14:10:04" uid="{FBF20AC2-4123-4DD5-83D3-6B664EAB33FC}"><Properties action="U" displayDecimal="1" default="0" hive="HKEY_LOCAL_MACHINE" key="SOFTWARE\Policies\Microsoft\Windows\OOBE" name="DisablePrivacyExperience" type="REG_DWORD" value="00000001"/></Registry>
+</RegistrySettings>

@@ -7,7 +7,6 @@ include_vm_resource_groups:
 conditional_groups:
   domain_controllers: "tags.kind == 'domain-controller'"
   workstations: "tags.kind == 'workstation'"
-  elasticsearch: "tags.kind == 'elasticsearch'"
 keyed_groups:
 - prefix: tag
   key: tags

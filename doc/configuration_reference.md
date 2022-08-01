@@ -10,6 +10,7 @@ dns_name: hunter.lab
 
 # Hostname of the domain controller
 dc_name: DC-1
+dc_ip: "10.10.0.10"
 
 # Credentials of the initial domain admin
 initial_domain_admin:

@@ -69,3 +69,15 @@
     members: "{{ item.members }}"
   with_items: "{{ domain.groups }}"
   tags: init
+
+- name: Copy GPO backups and script to DC
+  win_copy:
+    src: ./files/GPO_Backups
+    dest: "C:"
+  tags: gpo
+
+- name: Execute Set-Policies.ps1 to import and link the GPOs
+  win_command: powershell.exe -
+  args:
+    stdin: "C:\\GPO_Backups\\Set-Policies.ps1 {{ domain.initial_domain_admin.username }} {{ domain.initial_domain_admin.password }}"
+  tags: gpo

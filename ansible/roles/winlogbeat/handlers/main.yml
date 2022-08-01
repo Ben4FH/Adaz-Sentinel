@@ -1,5 +1,0 @@
-- name: restart winlogbeat
-  win_service:
-    name: winlogbeat
-    state: restarted
-  when: not winlogbeat_service.changed
