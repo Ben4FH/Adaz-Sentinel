@@ -1,5 +1,7 @@
 # Adaz-Sentinel: Active Directory Hunting Lab in Azure
 
+![](https://badgen.net/badge/icon/azure?icon=azure&label=platform) [![Maintained](https://img.shields.io/badge/maintained-Yes%20as%20of%20August%202022-green.svg)](https://shields.io/)
+
 This project allows you to **easily spin up Active Directory labs in Azure** using Terraform/Ansible, and forward logs to a log analytics workspace which is connected to Microsoft Sentinel.
 
 ## This is a fork of [Adaz by christophetd](https://github.com/christophetd/Adaz).
