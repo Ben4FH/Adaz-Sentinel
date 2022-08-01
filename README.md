@@ -97,14 +97,16 @@ Here's an incomplete and biased comparison with [Adaz](https://github.com/christ
 
 ## Getting started 
 
+**Note: This has been tested on a M1 Macbook Air, and an Ubuntu VM. I have not tried this on Windows or WSL so please let me know if it works.**
+
 ### Prerequisites
 
 - An Azure subscription. You can [create one for free](https://azure.microsoft.com/en-us/free/) and you get $200 of credits for the first 30 days. Note that this type of subscription has a limit of 4 vCPUs per region, which still allows you to run 1 domain controller and 2 workstations (with the default lab configuration).
 
-- [Terraform](https://www.terraform.io/downloads.html) >= 0.12
+- [Terraform](https://www.terraform.io/downloads.html) >= 0.12 (Tested on 1.2.5)
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
-- You must be logged in to your Azure account by running `az login`. Yu can use `az account list` to confirm you have access to your Azure subscription
+- You must be logged in to your Azure account by running `az login`. You can use `az account list` to confirm you have access to your Azure subscription.
 
 ### Installation
 
@@ -124,7 +126,9 @@ source ansible/venv/bin/activate
 pip install -r ansible/requirements.txt
 deactivate
 ```
-- Pull the latest sigma rules and convert them to KQL by using the provided script
+- Pull the latest sigma rules and convert them to KQL by using the provided script.
+- The first time you run it it will take about 10 minutes as it needs to convert all the rules.
+- Subsequent runs will take very little time as it will only convert new rules.
 
 ```bash
 # Go to the sigma folder
@@ -132,15 +136,18 @@ cd terraform/files/sigma
 ./convert_rules.sh
 ```
 
-- Initialize Terraform
+- Initialize Terraform and apply.
+- This process will take between 18 and 25 minutes.
 
 ```bash
 # Go back to the terraform folder
 cd ../../
 terraform init
+terraform apply
 ```
 
-- Destroy lab when finished using it (please check the azure portal to confirm that the resource group was removed, it may take 5 minutes.)
+- Destroy lab when finished using it.
+- Please check the azure portal to confirm that the resource group was removed, it may take 5 minutes to delete.
 ```bash
 # More reliable than running terraform destroy
 ./destroy.sh
@@ -177,13 +184,6 @@ SecurityEvent
 | where TimeGenerated >= ago(5m)
 | where EventID == "4688"
 | summarize count() by Computer
-
-RDP to your domain controller:
-xfreerdp /v:13.89.191.140 /u:hunter.lab\\hunter '/p:Hunt3r123.' +clipboard /cert-ignore
-
-RDP to a workstation:
-xfreerdp /v:52.176.5.229 /u:localadmin '/p:Localadmin!' +clipboard /cert-ignore
-
 ```
 
 By default, resources are deployed in the `West Europe` region under a resource group `ad-hunting-lab`. You can control the region with a Terraform variable:

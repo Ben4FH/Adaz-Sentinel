@@ -8,55 +8,50 @@ Annotated configuration file:
 # FQDN of your domain
 dns_name: hunter.lab
 
-# Hostname of the domain controller
+# Hostname & IP of the domain controller
 dc_name: DC-1
-dc_ip: "10.10.0.10"
+dc_ip: "10.0.10.10"
 
 # Credentials of the initial domain admin
 initial_domain_admin:
-  username: christophe
-  password: MyP4ssword!
+  username: hunter
+  password: Hunt3r123.
+
+# Organizational Units
+organizational_units:
+- OU=Workstations
+- OU=Accounts
+- OU=Roles
+
+# Domain users - by default, password := username
+users:
+- username: barry
+  OU: OU=Accounts
+- username: cisco
+  password: Cisco123!
+  OU: OU=Accounts
+- username: iris
+  OU: OU=Accounts
+- username: caitlin
+  OU: OU=Accounts
+
+# Domain groups and members assigned
+groups:
+- dn: CN=Hunters,OU=Roles
+  members: [barry, iris]
 
 # Credentials of the local admin created on all workstations
 default_local_admin:
   username: localadmin
   password: Localadmin!
 
-# Organizational units
-organizational_units:
-- OU=Roles
-- OU=Privileged,OU=Roles
-- OU=France
-- OU=Marseille,OU=France
-
-# Domain users - by default, password := username
-users:
-- username: john
-- username: brent
-  OU: OU=France
-- username: dany
-  password: Dany123
-  OU: OU=Marseille,OU=France
-
-# Domain groups to create
-groups:
-- dn: CN=MyRole,OU=Roles
-  members: [john, brent, dany]
-- dn: CN=AllMyUsers,CN=Users
-  members: [john, brent, dany]
-
+# Workstations to create and to domain-join, as well as the local admins on these workstations.
 workstations:
-- name: XTOF-WKS # Must be less than 15 characters
-  # Local users to create on the machine - by default, password := username
-  local_users:
-  - localuser
-  - username: localuser2
-    password: woot
+- name: BARRY-WKS
+  local_admins: [barry]
+- name: IRIS-WKS
+  local_admins: [iris]
 
-    # Local admins of the machine - can be domain or local users
-    local_admins: [john, dany, localuser2]
-
-- name: DANY-WKS
-
+# Should the Windows firewall be enabled?
 enable_windows_firewall: no
 ```
