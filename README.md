@@ -146,8 +146,9 @@ terraform init
 terraform apply
 ```
 
-- Destroy lab when finished using it.
-- Please check the azure portal to confirm that the resource group was removed, it may take 5 minutes to delete.
+- Destroy the lab when finished using it by running the provided script. This script will purge the log analytics workspaces, remove the resource group, and delete the Terraform state file. This process should take 4-5 minutes.
+- If you do not feel comfortable relying on this, feel free to check the Azure Portal to confirm that the resource group was deleted.
+
 ```bash
 # More reliable than running terraform destroy
 ./destroy.sh
@@ -161,7 +162,9 @@ Optionally edit [`domain.yml`](./domain.yml) according to your needs (reference 
 terraform apply
 ```
 
-Resource creation and provisioning takes 18-25 minutes. As long as you do not get any errors, you will have an output similar to the below. If you get an error for a rule, you can add it to [`failed.csv`](./terraform/files/sigma/failed.csv) and it will not use it next time, or you can fix the rule and move it to the [`override folder`](/terraform/files/sigma/override/)
+Resource creation and provisioning takes 18-25 minutes. As long as you do not get any errors, you will have an output similar to the below. If the error you got was for a rule, you can add it to [`failed.csv`](./terraform/files/sigma/failed.csv) and it will not use it next time, or you can fix the rule and move it to the [`override folder`](/terraform/files/sigma/override/)
+
+If you get an error you can still view this output by running `terraform output`.
 
 ```
 dc_public_ip = 13.89.191.140

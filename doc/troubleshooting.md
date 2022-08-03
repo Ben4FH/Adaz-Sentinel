@@ -19,3 +19,8 @@
 ---
 
 - I noticed this once in testing, but haven't been able to replicate the issue. Destroying and rebuilding the lab fixed the issue for me.
+
+## Ansible fails to authenticate to Azure - mentions MSAL cache in error
+---
+
+- You probably installed azure-cli just with apt. When you do this it might not have installed all the dependences. Please make sure you are following the install steps from the [Microsoft website](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux?pivots=apt)

@@ -4,13 +4,13 @@ This page provides some guidance around common operations you might wish to perf
 
 ## Viewing public IPs of your instances
 
-If you do not get any errors, you should see the public IPs of all machines on the output.  If you get an error at the end for a rule which failed to create, you will not get this output and so will have to check the machines in the Azure Portal.
+If you do not get any errors, you should see the public IPs of all machines on the output.  If you get an error at the end for a rule which failed to create, you will not get this output but can easily find it by running `terraform output`
 
 ## Destroying the lab
 
 While `terraform destroy` is an option, I found that simply nuking the resource group works better. You'll also need to remove the Terraform state file to make sure Terraform understands it shouldn't manage it anymore. I have included a bash script 'destroy.sh' which can be used instead. The script will:
 1. send a DELETE request to the Azure REST API so that the log analytics workspace is permanently destroyed. Azure keep them saved for longer otherwise and I have found this to cause issues.
-2. Use the azure cli to forcibly delete the resource group
+2. Use the azure cli to forcibly delete the resource group, and wait until it has been deleted.
 3. Delete the Terraform state file
 
 ## Adding users, groups, OUs after the lab has been instantiated
