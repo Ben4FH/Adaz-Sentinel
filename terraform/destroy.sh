@@ -12,8 +12,16 @@ for WORKSPACE in $WORKSPACE_NAMES; do
     -H "Authorization:Bearer $ACCESS_TOKEN" -H $CONTENT_TYPE -D -
 done;
 
-echo "Deleting the resource group"
+echo "Initiating deletion of the resource group: $RG_NAME"
 az group delete --yes --no-wait -g $RG_NAME
+
+while az group list --query '[].name' -o tsv | grep $RG_NAME > /dev/null;
+do
+    echo "Deletion still in progress..."
+    sleep 10
+done;
+
+echo "The resource group has been deleted, you may want to confirm this yourself in the Azure Portal"
 
 echo "Deleting the terraform state file"
 rm terraform.tfstate
