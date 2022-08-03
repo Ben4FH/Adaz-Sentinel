@@ -177,28 +177,6 @@ resource "azurerm_log_analytics_saved_search" "combined_events" {
   depends_on                 = [azurerm_log_analytics_workspace.log-analytics]
 }
 
-# Create Sentinel alert rules using the converted sigma rules
-resource "azurerm_sentinel_alert_rule_scheduled" "alert_rules_sigma" {
-
-  for_each = local.converted_rules
-
-  name                       = "${replace("${each.key}",".rule","")}"
-  log_analytics_workspace_id = index(tolist(local.converted_rules), each.key) > 512 ? azurerm_log_analytics_solution.sentinel[1].workspace_resource_id : azurerm_log_analytics_solution.sentinel[0].workspace_resource_id
-  display_name               = title(yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["title"])
-  severity                   = replace(title(yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["level"]),"Critical","High")
-  description                = yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["description"]
-  query                      = tostring(replace(file("${path.root}/files/sigma/converted/${each.key}"), "/^/", "workspace('${azurerm_log_analytics_workspace.log-analytics[0].name}')."))
-  query_frequency            = "PT5M"
-  query_period               = "PT5M"
-  suppression_duration       = "PT5M"
-  trigger_operator           = "GreaterThan"
-  enabled                    = true
-  suppression_enabled        = false
-  trigger_threshold          = 0
-
-  depends_on = [azurerm_virtual_machine_extension.mma-workstation]
-}
-
 # Create Sentinel alert rules from custom KQL queries (non-sigma)
 resource "azurerm_sentinel_alert_rule_scheduled" "alert_rules_kql" {
 
@@ -218,5 +196,27 @@ resource "azurerm_sentinel_alert_rule_scheduled" "alert_rules_kql" {
   suppression_enabled        = false
   trigger_threshold          = 0
 
-  depends_on = [azurerm_sentinel_alert_rule_scheduled.alert_rules_sigma]
+  depends_on = [azurerm_virtual_machine_extension.mma-workstation]
+}
+
+# Create Sentinel alert rules using the converted sigma rules
+resource "azurerm_sentinel_alert_rule_scheduled" "alert_rules_sigma" {
+
+  for_each = local.converted_rules
+
+  name                       = "${replace("${each.key}",".rule","")}"
+  log_analytics_workspace_id = index(tolist(local.converted_rules), each.key) > 512 ? azurerm_log_analytics_solution.sentinel[1].workspace_resource_id : azurerm_log_analytics_solution.sentinel[0].workspace_resource_id
+  display_name               = title(yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["title"])
+  severity                   = replace(title(yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["level"]),"Critical","High")
+  description                = yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["description"]
+  query                      = tostring(replace(file("${path.root}/files/sigma/converted/${each.key}"), "/^/", "workspace('${azurerm_log_analytics_workspace.log-analytics[0].name}')."))
+  query_frequency            = "PT5M"
+  query_period               = "PT5M"
+  suppression_duration       = "PT5M"
+  trigger_operator           = "GreaterThan"
+  enabled                    = true
+  suppression_enabled        = false
+  trigger_threshold          = 0
+
+  depends_on = [azurerm_sentinel_alert_rule_scheduled.alert_rules_kql]
 }
