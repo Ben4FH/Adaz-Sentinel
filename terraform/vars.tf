@@ -93,6 +93,11 @@ variable "log_channels" {
         event_types    = ["Error","Warning","Information"]
     },
     {
+        name           = "security-mitigations"
+        event_log_name = "Microsoft-Windows-Security-Mitigations/KernelMode"
+        event_types    = ["Error","Warning","Information"]
+    },
+    {
         name           = "defender"
         event_log_name = "Microsoft-Windows-Windows Defender/Operational"
         event_types    = ["Information","Error","Warning"]

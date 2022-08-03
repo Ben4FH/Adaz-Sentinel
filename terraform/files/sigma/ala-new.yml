@@ -158,6 +158,9 @@ logsources:
     index: PSEvent
     conditions:
       EventID: 4104
+  securityMitigations:
+    category: security-mitigations-kernel
+    index: CombinedEvent
 defaultindex: SysmonEvent
 
 fieldmappings:

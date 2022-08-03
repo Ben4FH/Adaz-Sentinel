@@ -72,4 +72,8 @@ HiveNameLength,
 HiveName,
 KeysUpdated,
 DirtyPages,
-AccountName
+AccountName,
+ProcessPath,
+ProcessCommandLine,
+ProcessId,
+ImageName

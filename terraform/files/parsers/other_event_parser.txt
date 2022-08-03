@@ -28,9 +28,21 @@ let processEvents = EventData
 | project-away EventData,EvData,EventDetail;
 processEvents;
 };
+let SECURITY_MITIGATIONS_KERNEL_12=() {
+let processEvents = EventData
+| where Source == "Microsoft-Windows-Security-Mitigations"
+| where EventID == 12
+| extend ProcessPath=EventDetail[1]["#text"]
+| extend ProcessCommandLine=EventDetail[3]["#text"]
+| extend ProcessId=EventDetail[4]["#text"]
+| extend ImageName=EventDetail[15]["#text"]
+| project-away EventData,EvData,EventDetail;
+processEvents;
+};
 (union isfuzzy=true
 KERNEL_EVENT_16,
-EVENT_LOG_CLEARED_104
+EVENT_LOG_CLEARED_104,
+SECURITY_MITIGATIONS_KERNEL_12
 )
 | project TimeGenerated,
 Source,
@@ -41,4 +53,8 @@ Channel,
 HiveNameLength,
 HiveName,
 KeysUpdated,
-DirtyPages
+DirtyPages,
+ProcessPath,
+ProcessCommandLine,
+ProcessId,
+ImageName
