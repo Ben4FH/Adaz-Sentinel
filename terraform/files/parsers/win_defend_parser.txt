@@ -1,0 +1,50 @@
+let EventData = Event
+| where Source == "Microsoft-Windows-Windows Defender"
+| extend RenderedDescription = tostring(split(RenderedDescription, ":")[0])
+| project TimeGenerated,
+    Source,
+    EventID,
+    Computer,
+    UserName,
+    EventData,
+    RenderedDescription
+| extend EvData = parse_xml(EventData)
+| extend EventDetail = EvData.DataItem.EventData.Data
+| project-away EventData,
+    EvData;
+let CONFIG_CHANGE_5007=() {
+let processEvents = EventData
+| where EventID == 5007
+| extend OldValue = EventDetail[2]["#text"]
+| extend NewValue = EventDetail[3]["#text"];
+processEvents;
+};
+let MALWARE_DETECTION_1116=() {
+let processEvents = EventData
+| where EventID == 1116
+| extend ThreatID = EventDetail[6]["#text"]
+| extend ThreatName = EventDetail[7]["#text"]
+| extend SourceName = EventDetail[17]["#text"]
+| extend ProcessName = EventDetail[18]["#text"]
+| extend DetectionUser = EventDetail[19]["#text"]
+| extend Path = EventDetail[21]["#text"];
+processEvents;
+};
+(union isfuzzy=true
+CONFIG_CHANGE_5007,
+MALWARE_DETECTION_1116
+)
+| project 
+TimeGenerated,
+Source,
+EventID,
+Computer,
+UserName,
+OldValue,
+NewValue,
+ThreatID,
+ThreatName,
+SourceName,
+ProcessName,
+DetectionUser,
+Path
