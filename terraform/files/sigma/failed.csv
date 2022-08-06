@@ -10,7 +10,6 @@ win_exchange_proxyshell_remove_mailbox_export,needs parsing of exchange logs,Fai
 win_exchange_transportagent_failed,needs parsing of exchange logs,Failed to resolve entity 'windows'
 win_set_oabvirtualdirectory_externalurl,needs parsing of exchange logs,Failed to resolve entity 'windows'
 sysmon_susp_remote_thread,needs parsing of sourceparentimage field,'where' operator: Failed to resolve scalar expression named 'SourceParentImage'
-win_defender_amsi_trigger,needs parsing of windows defender log,Failed to resolve entity 'windows'
 win_defender_history_delete,needs parsing of windows defender log,Failed to resolve entity 'windows'
 win_defender_psexec_wmi_asr,needs parsing of windows defender log,Failed to resolve entity 'windows'
 win_defender_tamper_protection_trigger,needs parsing of windows defender log,Failed to resolve entity 'windows'
@@ -22,7 +21,7 @@ win_mssql_xp_cmdshell_change,do not ingest sql logs,
 win_mssql_disable_audit_settings,do not ingest sql logs,
 win_alert_mimikatz_keywords,no keyword support,Left and right side of the logical expression must be Boolean
 win_susp_sam_dump,parsing error,Left and right side of the logical expression must be Boolean
-win_alert_lsass_access,needs windefend parsing,
+win_defender_alert_lsass_access,needs windefend parsing,
 win_vul_cve_2021_41379,needs application logs,
 posh_ps_susp_invocation_specific,parsing error,Query could not be parsed at 'https'
 win_exchange_cve_2021_42321,needs exchange logs,
