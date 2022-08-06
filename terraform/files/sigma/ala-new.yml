@@ -159,8 +159,11 @@ logsources:
     conditions:
       EventID: 4104
   securityMitigations:
-    category: security-mitigations-kernel
+    category: security-mitigations
     index: CombinedEvent
+  windowsDefender:
+    service: windefend
+    index: WinDefendEvent
 defaultindex: SysmonEvent
 
 fieldmappings:
@@ -318,3 +321,4 @@ fieldmappings:
     category=driver_load:
       - ImageLoaded
     default: ImagePath
+  Source_Name: SourceName
