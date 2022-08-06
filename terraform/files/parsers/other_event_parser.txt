@@ -28,10 +28,10 @@ let processEvents = EventData
 | project-away EventData,EvData,EventDetail;
 processEvents;
 };
-let SECURITY_MITIGATIONS_KERNEL_12=() {
+let SECURITY_MITIGATIONS_KERNEL_11_12=() {
 let processEvents = EventData
 | where Source == "Microsoft-Windows-Security-Mitigations"
-| where EventID == 12
+| where EventID in (11,12)
 | extend ProcessPath=EventDetail[1]["#text"]
 | extend ProcessCommandLine=EventDetail[3]["#text"]
 | extend ProcessId=EventDetail[4]["#text"]
@@ -42,7 +42,7 @@ processEvents;
 (union isfuzzy=true
 KERNEL_EVENT_16,
 EVENT_LOG_CLEARED_104,
-SECURITY_MITIGATIONS_KERNEL_12
+SECURITY_MITIGATIONS_KERNEL_11_12
 )
 | project TimeGenerated,
 Source,
