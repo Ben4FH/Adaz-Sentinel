@@ -137,6 +137,12 @@ variable "parsers" {
         function_alias             = "BitsEvent"
     },
     {
+        name                       = "Windows Defender Parser"
+        display_name               = "WinDefendParser"
+        file_name                  = "win_defend_parser.txt"
+        function_alias             = "WinDefendEvent"
+    },
+    {
         name                       = "Other Event Parser"
         display_name               = "OtherEventParser"
         file_name                  = "other_event_parser.txt"
