@@ -147,6 +147,12 @@ variable "parsers" {
         display_name               = "OtherEventParser"
         file_name                  = "other_event_parser.txt"
         function_alias             = "OtherEvent"
+    },
+    {
+        name                       = "Security Event Parser"
+        display_name               = "SecurityEventParser"
+        file_name                  = "security_event_parser.txt"
+        function_alias             = "CustomSecurityEvent"
     }
   ]
 }

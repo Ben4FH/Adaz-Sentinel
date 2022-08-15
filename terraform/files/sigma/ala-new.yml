@@ -10,7 +10,7 @@ logsources:
   securityEvents:
     product: windows
     service: security
-    index: SecurityEvent
+    index: CustomSecurityEvent
   sysmonImageLoad:
     category: image_load
     index: SysmonEvent
@@ -213,7 +213,6 @@ fieldmappings:
   Image:
     service=security:
       - Process
-      - parse_xml(EventData).EventData.Data[6]["#text"] # eid 5156
     default: Image
   event_data.Image:
     service=security: Process
@@ -269,35 +268,22 @@ fieldmappings:
   SHA256: Hashes.SHA256
   Imphash: Hashes.IMPHASH
   IMPHASH: Hashes.IMPHASH
-  AttributeLDAPDisplayName: parse_xml(EventData).EventData.Data[11]["#text"]
-  AttributeValue: parse_xml(EventData).EventData.Data[13]["#text"]
-  ObjectType: parse_xml(EventData).EventData.Data[14]["#text"]
-  Application: parse_xml(EventData).EventData.Data[1]["#text"] # eid 5156
-  SourceAddress: parse_xml(EventData).EventData.Data[3]["#text"] # eid 5156
-  SourcePort:
-    category=network_connection:
-      - SourcePort
-    default: parse_xml(EventData).EventData.Data[4]["#text"] # eid 5156
-  DestAddress: parse_xml(EventData).EventData.Data[5]["#text"] # eid 5156
-  DestPort: parse_xml(EventData).EventData.Data[6]["#text"] # eid 5156
-  DestinationPort: 
-    service=security: parse_xml(EventData).EventData.Data[6]["#text"]
+  AttributeLDAPDisplayName: parse_xml(EventData).EventData.Data[11]["#text"] # eid 5136
+  AttributeValue: parse_xml(EventData).EventData.Data[13]["#text"] # eid 5136
+  ObjectType:
+    - ObjectType
+    - parse_xml(EventData).EventData.Data[14]["#text"] # 4661 or 4656
+  DestinationPort:
+    service=security: DestPort
     default: DestinationPort
-  LayerRTID: parse_xml(EventData).EventData.Data[10]["#text"]
-  FailureCode: # This is not pretty, will fix at some point
-    service=security:
-      - parse_xml(EventData).EventData.Data[4]["#text"]
-      - parse_xml(EventData).EventData.Data[6]["#text"]
-      - parse_xml(EventData).EventData.Data[8]["#text"]
-  TargetName:
-    service=security:
-      - parse_xml(EventData).EventData.Data[4]["#text"] # eid 5379
+  FailureCode:
+    service=security: Status
   ObjectClass:
     service=security:
       - parse_xml(EventData).EventData.Data[10]["#text"] # eid 5136
   Accesses:
     service=security:
-      - parse_xml(EventData).EventData.Data[11]["#text"] # eid 5145
+      - AccessList # eid 5145
   OldTargetUserName:
     service=security:
       - parse_xml(EventData).EventData.Data[0]["#text"] # eid 4781
@@ -313,9 +299,7 @@ fieldmappings:
       - parse_xml(EventData).DataItem.UserData.EventXML.Address
   OriginalName: OriginalFileName
   details: Details
-  CertThumbprint: parse_xml(EventData).EventData.Data[13]["#text"] # eid 4768
   ServicePrincipalNames: parse_xml(EventData).EventData.Data[28]["#text"] # eid 4742
-  Service: parse_xml(EventData).EventData.Data[5]["#text"] # eid 4673
   TaskName: parse_xml(EventData).EventData.Data[4]["#text"] # eid 4698
   ImagePath:
     category=driver_load:

@@ -1,0 +1,78 @@
+let EventData = SecurityEvent
+| extend EvData = parse_xml(EventData)
+| extend EventDetail = EvData.EventData.Data
+| project-away EventData;
+let PRIV_SVC_CALLED_4673=() {
+let processEvents = EventData
+| where EventID == 4673
+| extend Service = tostring(EventDetail[5]["#text"])
+| project-away EventDetail,EvData;
+processEvents;
+};
+let TGT_REQ_4768=() {
+let processEvents = EventData
+| where EventID == 4768
+| extend Status = tostring(EventDetail[6]["#text"])
+| extend CertThumbprint = EventDetail[13]["#text"]
+| project-away EventDetail, EvData;
+processEvents;
+};
+let TGS_REQ_4769=() {
+let processEvents = EventData
+| where EventID == 4769
+| extend Status = tostring(EventDetail[8]["#text"])
+| project-away EventDetail, EvData;
+processEvents;
+};
+let PRE_AUTH_FAILED_4771=() {
+let processEvents = EventData
+| where EventID == 4771
+| extend Status = tostring(EventDetail[4]["#text"])
+| project-away EventDetail, EvData;
+processEvents;
+};
+let ALLOWED_CONN_5156=() {
+let processEvents = EventData
+| where EventID == 5156
+| extend ProccessID = EventDetail[0]["#text"]
+| extend Application = EventDetail[1]["#text"]
+| extend Direction = EventDetail[2]["#text"]
+| extend SourceAddress = EventDetail[3]["#text"]
+| extend SourcePort = EventDetail[4]["#text"]
+| extend DestAddress = EventDetail[5]["#text"]
+| extend DestPort = EventDetail[6]["#text"]
+| extend Protocol = EventDetail[7]["#text"]
+| extend FilterRTID = EventDetail[8]["#text"]
+| extend LayerName = EventDetail[9]["#text"]
+| extend LayerRTID = EventDetail[10]["#text"]
+| extend RemoteUserID = EventDetail[11]["#text"]
+| extend RemoteMachineID = EventDetail[12]["#text"]
+| project-away EventDetail,EvData;
+processEvents;
+};
+let CRED_MAN_READ_5379=() {
+let processEvents = EventData
+| where EventID == 5379
+| extend SubjectUserSid = tostring(EventDetail[0]["#text"])
+| extend SubjectUserName = tostring(EventDetail[1]["#text"])
+| extend SubjectDomainName = tostring(EventDetail[2]["#text"])
+| extend SubjectLogonId = tostring(EventDetail[3]["#text"])
+| extend TargetName = tostring(EventDetail[4]["#text"])
+| extend Type = tostring(EventDetail[5]["#text"])
+| extend CountOfCredentialsReturned = EventDetail[6]["#text"]
+| extend ReadOperation = EventDetail[7]["#text"]
+| extend ReturnCode = EventDetail[8]["#text"]
+| extend ProcessCreationTime = EventDetail[9]["#text"]
+| extend ClientProcessId = EventDetail[10]["#text"]
+| project-away EventDetail,EvData;
+processEvents;
+};
+(union isfuzzy=true
+PRIV_SVC_CALLED_4673,
+TGT_REQ_4768,
+TGS_REQ_4769,
+PRE_AUTH_FAILED_4771,
+ALLOWED_CONN_5156,
+CRED_MAN_READ_5379
+)
+| union isfuzzy=true (SecurityEvent | where EventID !in (4673,4768,4769,4771,5156,5379))
