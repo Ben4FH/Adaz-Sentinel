@@ -183,7 +183,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "alert_rules_kql" {
   for_each = local.custom_kql
 
   name                       = "${replace("${each.key}",".kql","")}"
-  log_analytics_workspace_id = length(tolist(local.converted_rules)) > 512 ? azurerm_log_analytics_solution.sentinel[1].workspace_resource_id : azurerm_log_analytics_solution.sentinel[0].workspace_resource_id
+  log_analytics_workspace_id = index(tolist(local.custom_kql), each.key) > 511 ? azurerm_log_analytics_solution.sentinel[1].workspace_resource_id : azurerm_log_analytics_solution.sentinel[0].workspace_resource_id
   display_name               = title(yamldecode(file("${path.root}/files/custom_kql/${replace("${each.key}",".kql",".yml")}"))["title"])
   severity                   = replace(title(yamldecode(file("${path.root}/files/custom_kql/${replace("${each.key}",".kql",".yml")}"))["level"]),"Critical","High")
   description                = yamldecode(file("${path.root}/files/custom_kql/${replace("${each.key}",".kql",".yml")}"))["description"]
@@ -205,7 +205,7 @@ resource "azurerm_sentinel_alert_rule_scheduled" "alert_rules_sigma" {
   for_each = local.converted_rules
 
   name                       = "${replace("${each.key}",".rule","")}"
-  log_analytics_workspace_id = index(tolist(local.converted_rules), each.key) > 512 ? azurerm_log_analytics_solution.sentinel[1].workspace_resource_id : azurerm_log_analytics_solution.sentinel[0].workspace_resource_id
+  log_analytics_workspace_id = index(tolist(local.converted_rules), each.key) > (511 - length(tolist(local.custom_kql))) ? azurerm_log_analytics_solution.sentinel[1].workspace_resource_id : azurerm_log_analytics_solution.sentinel[0].workspace_resource_id
   display_name               = title(yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["title"])
   severity                   = replace(title(yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["level"]),"Critical","High")
   description                = yamldecode(file("${path.root}/files/sigma/converted/${replace("${each.key}",".rule",".yml")}"))["description"]
