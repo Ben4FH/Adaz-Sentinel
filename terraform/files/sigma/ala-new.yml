@@ -116,6 +116,11 @@ logsources:
     product: windows
     category: sysmon_status
     index: SysmonEvent
+  sysmonBlock:
+    product: windows
+    category: file_block
+    conditions:
+      EventID: 27
   sysmonWmi:
     category: wmi_event
     index: SysmonEvent
@@ -164,6 +169,9 @@ logsources:
   windowsDefender:
     service: windefend
     index: WinDefendEvent
+  diagnosisScripted:
+    service: diagnosis-scripted
+    index: CombinedEvent
 defaultindex: SysmonEvent
 
 fieldmappings:
