@@ -72,7 +72,9 @@ detection:
         Image|endswith: '\PING.EXE'
         ParentCommandLine|contains: '\DismFoDInstall.cmd'
     filter_mon:
-        CommandLine|endswith: 'MonitorKnowledgeDiscovery.vbs"'
+        CommandLine|endswith: 
+            - 'MonitorKnowledgeDiscovery.vbs"'
+            - 'ChangeEventModuleBatchSize.vbs"'
         CurrentDirectory|startswith: 'C:\Program Files\Microsoft Monitoring Agent\Agent\Health Service State\Monitoring Host Temporary Files'
     condition: all of selection* and not 1 of filter*
 falsepositives:
