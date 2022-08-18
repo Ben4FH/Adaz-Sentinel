@@ -76,4 +76,5 @@ AccountName,
 ProcessPath,
 ProcessCommandLine,
 ProcessId,
-ImageName
+ImageName,
+PackagePath
