@@ -86,3 +86,5 @@ win_invoke_obfuscation_stdin_services,parsing error,Request is invalid and canno
 posh_pm_invoke_obfuscation_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that sorry. [line:position=0:0]
 win_invoke_obfuscation_via_var_services_security,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that sorry. [line:position=0:0]
 file_change_win_2022_timestomping,unsupported feature,
+win_susp_vuln_cve_2022_21919_or_cve_2021_34484,needs application logs,
+posh_pc_remote_powershell_session,noisy,
