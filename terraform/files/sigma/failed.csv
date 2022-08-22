@@ -88,3 +88,4 @@ win_invoke_obfuscation_via_var_services_security,parsing error,Request is invali
 file_change_win_2022_timestomping,unsupported feature,
 win_susp_vuln_cve_2022_21919_or_cve_2021_34484,needs application logs,
 posh_pc_remote_powershell_session,noisy,
+driver_load_vuln_drivers,query too long,
