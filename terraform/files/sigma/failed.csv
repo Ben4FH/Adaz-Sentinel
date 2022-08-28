@@ -89,3 +89,5 @@ file_change_win_2022_timestomping,unsupported feature,
 win_susp_vuln_cve_2022_21919_or_cve_2021_34484,needs application logs,
 posh_pc_remote_powershell_session,noisy,
 driver_load_vuln_drivers,query too long,
+sysmon_susp_remote_thread_source,no SourceParentImage field,
+// KEEP THIS LINE AT THE END
