@@ -275,6 +275,7 @@ fieldmappings:
   sha256: Hashes.SHA256
   SHA256: Hashes.SHA256
   Imphash: Hashes.IMPHASH
+  imphash: Hashes.IMPHASH
   IMPHASH: Hashes.IMPHASH
   AttributeLDAPDisplayName: parse_xml(EventData).EventData.Data[11]["#text"] # eid 5136
   AttributeValue: parse_xml(EventData).EventData.Data[13]["#text"] # eid 5136
@@ -292,12 +293,6 @@ fieldmappings:
   Accesses:
     service=security:
       - AccessList # eid 5145
-  OldTargetUserName:
-    service=security:
-      - parse_xml(EventData).EventData.Data[0]["#text"] # eid 4781
-  NewTargetUserName:
-    service=security:
-      - parse_xml(EventData).EventData.Data[1]["#text"] # eid 4781
   TargetFileName: TargetFilename
   Provider_Name:
     service=security: EventSourceName

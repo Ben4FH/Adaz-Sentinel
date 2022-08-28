@@ -65,7 +65,7 @@ class AzureLogAnalyticsBackend(SingleTextQueryBackend):
     mapListsSpecialHandling = True
     mapListValueExpression = "%s in %s"
     typedValueExpression = {
-        SigmaRegularExpressionModifier: "matches regex \"(?i)%s\"",
+        SigmaRegularExpressionModifier: "matches regex @\"(?i)%s\"",
         SigmaContainsModifier: "contains \"%s\""
     }
 
@@ -121,10 +121,7 @@ class AzureLogAnalyticsBackend(SingleTextQueryBackend):
                 val = re.sub('\\\\', '\\\\\\\\', val)
                 val = re.sub('(\w)\.(\w)', r'\1\\.\2', val)
                 val = re.sub('(Program Files )(\(x86)(\))', r'\1\\\2\\\3', val)
-                if "\\" in val:
-                    val = "@'(?i)%s'" % (val)
-                else:
-                    val = "'(?i)%s'" % (val)
+                val = "@'(?i)%s'" % (val)
                 return "%s %s" % (op, val)
             elif val.startswith("*") or val.endswith("*"):
                 if val.startswith("*") and val.endswith("*"):
