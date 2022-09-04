@@ -22,12 +22,10 @@ win_mssql_disable_audit_settings,do not ingest sql logs,
 win_alert_mimikatz_keywords,no keyword support,Left and right side of the logical expression must be Boolean
 win_susp_sam_dump,parsing error,Left and right side of the logical expression must be Boolean
 win_defender_alert_lsass_access,needs windefend parsing,
-win_vul_cve_2021_41379,needs application logs,
 posh_ps_susp_invocation_specific,parsing error,Query could not be parsed at 'https'
 win_exchange_cve_2021_42321,needs exchange logs,
 win_mssql_sp_procoption_set,needs sql logs,
 file_event_win_powershell_exploit_scripts,query too long,
-win_susp_msmpeng_crash,needs application event logs,
 win_apt_gallium,needs dns server logs,
 win_vul_cve_2020_0688,needs application logs,
 proc_creation_win_dnscat2_powershell_implementation,parsing issue,Field mappings in aggregations must be single valued
@@ -86,8 +84,9 @@ win_invoke_obfuscation_stdin_services,parsing error,Request is invalid and canno
 posh_pm_invoke_obfuscation_stdin,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that sorry. [line:position=0:0]
 win_invoke_obfuscation_via_var_services_security,parsing error,Request is invalid and cannot be processed: Syntax error: SYN0001: I could not parse that sorry. [line:position=0:0]
 file_change_win_2022_timestomping,unsupported feature,
-win_susp_vuln_cve_2022_21919_or_cve_2021_34484,needs application logs,
+win_susp_vuln_cve_2022_21919_or_cve_2021_34484,needs User Profiles Service parsing,
 posh_pc_remote_powershell_session,noisy,
 driver_load_vuln_drivers,query too long,
 sysmon_susp_remote_thread_source,no SourceParentImage field,
+proc_creation_win_susp_service_stop,query too long,
 // KEEP THIS LINE AT THE END
