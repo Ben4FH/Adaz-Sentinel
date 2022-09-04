@@ -101,6 +101,11 @@ variable "log_channels" {
         name           = "defender"
         event_log_name = "Microsoft-Windows-Windows Defender/Operational"
         event_types    = ["Information","Error","Warning"]
+    },
+    {
+      name             = "application"
+      event_log_name   = "Application"
+      event_types      = ["Information","Error","Warning"]
     }]
 }
 
