@@ -4,7 +4,7 @@ description: Detects when an attacker tries to hide from Sysmon by disabling or 
 status: experimental
 author: frack113
 date: 2021/06/04
-modified: 2021/09/07
+modified: 2022/07/31
 references:
     - https://github.com/redcanaryco/atomic-red-team/blob/f339e7da7d05f6057fdfcdd3742bfcf365fee2a9/atomics/T1562.001/T1562.001.md
     - https://talesfrominfosec.blogspot.com/2017/12/killing-sysmon-silently.html
