@@ -7,6 +7,7 @@ workspace("WORKSPACE_NAME").OtherEvent)
 TimeGenerated,
 Source,
 EventID,
+EventData,
 Computer,
 UserName,
 jobTitle,

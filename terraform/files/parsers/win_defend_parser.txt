@@ -13,14 +13,14 @@ let EventData = Event
 | project-away EventData,
     EvData;
 let CONFIG_CHANGE_5007=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 5007
 | extend OldValue = EventDetail[2]["#text"]
 | extend NewValue = EventDetail[3]["#text"];
-processEvents;
+Events;
 };
 let MALWARE_DETECTION_1116=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 1116
 | extend ThreatID = EventDetail[6]["#text"]
 | extend ThreatName = EventDetail[7]["#text"]
@@ -28,7 +28,7 @@ let processEvents = EventData
 | extend ProcessName = EventDetail[18]["#text"]
 | extend DetectionUser = EventDetail[19]["#text"]
 | extend Path = EventDetail[21]["#text"];
-processEvents;
+Events;
 };
 (union isfuzzy=true
 CONFIG_CHANGE_5007,

@@ -10,7 +10,7 @@ let EventData = Event
 | extend EvData = parse_xml(EventData)
 | extend EventDetail = EvData.DataItem.EventData.Data;
 let KERNEL_EVENT_16=() {
-let processEvents = EventData
+let Events = EventData
 | where Source == "Microsoft-Windows-Kernel-General"
 | where EventID == 16
 | extend HiveNameLength = EventDetail[0]["#text"]
@@ -18,18 +18,18 @@ let processEvents = EventData
 | extend KeysUpdated = EventDetail[2]["#text"]
 | extend DirtyPages = EventDetail[3]["#text"]
 | project-away EventData,EvData,EventDetail;
-processEvents;
+Events;
 };
 let EVENT_LOG_CLEARED_104=() {
-let processEvents = EventData
+let Events = EventData
 | where Source == "Microsoft-Windows-Eventlog"
 | where EventID == 104
 | extend Channel=EvData.DataItem.UserData.LogFileCleared["Channel"]
 | project-away EventData,EvData,EventDetail;
-processEvents;
+Events;
 };
 let SECURITY_MITIGATIONS_KERNEL_11_12=() {
-let processEvents = EventData
+let Events = EventData
 | where Source == "Microsoft-Windows-Security-Mitigations"
 | where EventID in (11,12)
 | extend ProcessPath=EventDetail[1]["#text"]
@@ -37,25 +37,32 @@ let processEvents = EventData
 | extend ProcessId=EventDetail[4]["#text"]
 | extend ImageName=EventDetail[15]["#text"]
 | project-away EventData,EvData,EventDetail;
-processEvents;
+Events;
 };
 let DIAGNOSIS_SCRIPTED_101=() {
-let processEvents = EventData
+let Events = EventData
 | where Source == "Microsoft-Windows-Diagnosis-Scripted"
 | where EventID == 101
 | extend PackagePath=EventDetail["#text"] 
 | project-away EventData,EvData,EventDetail;
-processEvents;
+Events;
+};
+let MSI_INSTALLER=() {
+let Events = EventData
+| where Source == "MsiInstaller";
+Events;
 };
 (union isfuzzy=true
 KERNEL_EVENT_16,
 EVENT_LOG_CLEARED_104,
 SECURITY_MITIGATIONS_KERNEL_11_12,
-DIAGNOSIS_SCRIPTED_101
+DIAGNOSIS_SCRIPTED_101,
+MSI_INSTALLER
 )
 | project TimeGenerated,
 Source,
 EventID,
+EventData,
 Computer,
 UserName,
 Channel,

@@ -119,6 +119,7 @@ logsources:
   sysmonBlock:
     product: windows
     category: file_block
+    index: SysmonEvent
     conditions:
       EventID: 27
   sysmonWmi:
@@ -172,7 +173,9 @@ logsources:
   diagnosisScripted:
     service: diagnosis-scripted
     index: CombinedEvent
-defaultindex: SysmonEvent
+  applicationEvent:
+    service: application
+    index: CombinedEvent
 
 fieldmappings:
   ComputerName: Computer
@@ -309,3 +312,4 @@ fieldmappings:
       - ImageLoaded
     default: ImagePath
   Source_Name: SourceName
+  Data: EventData

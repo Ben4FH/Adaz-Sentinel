@@ -22,19 +22,19 @@ let EventData = Event
 // Event ID 255
 //--------------------------
 let SYSMONEVENT_ERROR_255=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 255
 | extend UtcTime = EventDetail.[0].["#text"], 
 ID = EventDetail.[1].["#text"], 
 Description = EventDetail.[2].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 1
 //--------------------------
 let SYSMONEVENT_CREATE_PROCESS_1=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 1
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -61,12 +61,12 @@ ParentUser = EventDetail.[22].["#text"]
 | extend Hashes = extract_all(@"(?P<key>\w+)=(?P<value>[a-zA-Z0-9]+)", dynamic(["key","value"]), tostring(EventDetail.[17].["#text"]))| mv-apply Hashes on (summarize Hashes = make_bag(pack(tostring(Hashes[0]), tostring(Hashes[1]))))
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 2
 //--------------------------
 let SYSMONEVENT_FILE_TIME_2=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 2
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -78,12 +78,12 @@ CreationUtcTime = EventDetail.[6].["#text"],
 PreviousCreationUtcTime = EventDetail.[7].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 3
 //--------------------------
 let SYSMONEVENT_NETWORK_CONNECT_3=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 3
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -105,12 +105,12 @@ DestinationPort = EventDetail.[16].["#text"],
 DestinationPortName = EventDetail.[17].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 4
 //--------------------------
 let SYSMONEVENT_SERVICE_STATE_CHANGE_4=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 4
 | extend UtcTime = EventDetail.[0].["#text"], 
 State = EventDetail.[1].["#text"], 
@@ -118,12 +118,12 @@ Version = EventDetail.[2].["#text"],
 SchemaVersion = EventDetail.[3].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 5
 //--------------------------
 let SYSMONEVENT_PROCESS_TERMINATE_5=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 5
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -132,12 +132,12 @@ ProcessId = EventDetail.[3].["#text"],
 Image = EventDetail.[4].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 6
 //--------------------------
 let SYSMONEVENT_DRIVER_LOAD_6=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 6
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -148,12 +148,12 @@ SignatureStatus = EventDetail.[6].["#text"]
 | extend Hashes = extract_all(@"(?P<key>\w+)=(?P<value>[a-zA-Z0-9]+)", dynamic(["key","value"]), tostring(EventDetail.[3].["#text"]))| mv-apply Hashes on (summarize Hashes = make_bag(pack(tostring(Hashes[0]), tostring(Hashes[1]))))
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 7
 //--------------------------
 let SYSMONEVENT_IMAGE_LOAD_7=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 7
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -172,12 +172,12 @@ SignatureStatus = EventDetail.[14].["#text"]
 | extend Hashes = extract_all(@"(?P<key>\w+)=(?P<value>[a-zA-Z0-9]+)", dynamic(["key","value"]), tostring(EventDetail.[11].["#text"]))| mv-apply Hashes on (summarize Hashes = make_bag(pack(tostring(Hashes[0]), tostring(Hashes[1]))))
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 8
 //--------------------------
 let SYSMONEVENT_CREATE_REMOTE_THREAD_8=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 8
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -193,12 +193,12 @@ StartModule = EventDetail.[10].["#text"],
 StartFunction = EventDetail.[11].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 9
 //--------------------------
 let SYSMONEVENT_RAWACCESS_READ_9=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 9
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -208,12 +208,12 @@ Image = EventDetail.[4].["#text"],
 Device = EventDetail.[5].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 10
 //--------------------------
 let SYSMONEVENT_ACCESS_PROCESS_10=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 10
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -228,12 +228,12 @@ GrantedAccess = EventDetail.[9].["#text"],
 CallTrace = EventDetail.[10].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 11
 //--------------------------
 let SYSMONEVENT_FILE_CREATE_11=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 11
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -244,12 +244,12 @@ TargetFilename = EventDetail.[5].["#text"],
 CreationUtcTime = EventDetail.[6].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 12
 //--------------------------
 let SYSMONEVENT_REG_KEY_12=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 12
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -260,12 +260,12 @@ Image = EventDetail.[5].["#text"],
 TargetObject = EventDetail.[6].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 13
 //--------------------------
 let SYSMONEVENT_REG_SETVALUE_13=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 13
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -277,12 +277,12 @@ TargetObject = EventDetail.[6].["#text"],
 Details = EventDetail.[7].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 14
 //--------------------------
 let SYSMONEVENT_REG_NAME_14=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 14
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -294,12 +294,12 @@ TargetObject = EventDetail.[6].["#text"],
 NewName = EventDetail.[7].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 15
 //--------------------------
 let SYSMONEVENT_FILE_CREATE_STREAM_HASH_15=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 15
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -312,24 +312,24 @@ Contents = EventDetail.[8].["#text"]
 | extend Hash = extract_all(@"(?P<key>\w+)=(?P<value>[a-zA-Z0-9]+)", dynamic(["key","value"]), tostring(EventDetail.[7].["#text"]))| mv-apply Hash on (summarize Hash = make_bag(pack(tostring(Hash[0]), tostring(Hash[1]))))
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 16
 //--------------------------
 let SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE_16=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 16
 | extend UtcTime = EventDetail.[0].["#text"], 
 Configuration = EventDetail.[1].["#text"], 
 ConfigurationFileHash = EventDetail.[2].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 17
 //--------------------------
 let SYSMONEVENT_CREATE_NAMEDPIPE_17=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 17
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -340,12 +340,12 @@ PipeName = EventDetail.[5].["#text"],
 Image = EventDetail.[6].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 18
 //--------------------------
 let SYSMONEVENT_CONNECT_NAMEDPIPE_18=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 18
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -356,12 +356,12 @@ PipeName = EventDetail.[5].["#text"],
 Image = EventDetail.[6].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 19
 //--------------------------
 let SYSMONEVENT_WMI_FILTER_19=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 19
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -373,12 +373,12 @@ Name = EventDetail.[6].["#text"],
 Query = EventDetail.[7].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 20
 //--------------------------
 let SYSMONEVENT_WMI_CONSUMER_20=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 20
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -390,12 +390,12 @@ Type = EventDetail.[6].["#text"],
 Destination = EventDetail.[7].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 21
 //--------------------------
 let SYSMONEVENT_WMI_BINDING_21=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 21
 | extend RuleName = EventDetail.[0].["#text"], 
 EventType = EventDetail.[1].["#text"], 
@@ -406,12 +406,12 @@ Consumer = EventDetail.[5].["#text"],
 Filter = EventDetail.[6].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 22
 //--------------------------
 let SYSMONEVENT_DNS_QUERY_22=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 22
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -423,12 +423,12 @@ QueryResults = EventDetail.[6].["#text"],
 Image = EventDetail.[7].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 23
 //--------------------------
 let SYSMONEVENT_FILE_DELETE_23=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 23
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -442,12 +442,12 @@ Archived = EventDetail.[9].["#text"]
 | extend Hashes = extract_all(@"(?P<key>\w+)=(?P<value>[a-zA-Z0-9]+)", dynamic(["key","value"]), tostring(EventDetail.[7].["#text"]))| mv-apply Hashes on (summarize Hashes = make_bag(pack(tostring(Hashes[0]), tostring(Hashes[1]))))
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 24
 //--------------------------
 let SYSMONEVENT_CLIPBOARD_24=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 24
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -460,12 +460,12 @@ Archived = EventDetail.[8].["#text"]
 | extend Hashes = extract_all(@"(?P<key>\w+)=(?P<value>[a-zA-Z0-9]+)", dynamic(["key","value"]), tostring(EventDetail.[7].["#text"]))| mv-apply Hashes on (summarize Hashes = make_bag(pack(tostring(Hashes[0]), tostring(Hashes[1]))))
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 25
 //--------------------------
 let SYSMONEVENT_PROCESS_IMAGE_TAMPERING_25=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 25
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -475,12 +475,12 @@ Image = EventDetail.[4].["#text"],
 Type = EventDetail.[5].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 // Event ID 26
 //--------------------------
 let SYSMONEVENT_FILE_DELETE_DETECTED_26=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 26
 | extend RuleName = EventDetail.[0].["#text"], 
 UtcTime = EventDetail.[1].["#text"], 
@@ -493,7 +493,7 @@ IsExecutable = EventDetail.[8].["#text"]
 | extend Hashes = extract_all(@"(?P<key>\w+)=(?P<value>[a-zA-Z0-9]+)", dynamic(["key","value"]), tostring(EventDetail.[7].["#text"]))| mv-apply Hashes on (summarize Hashes = make_bag(pack(tostring(Hashes[0]), tostring(Hashes[1]))))
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 (union isfuzzy=true
 SYSMONEVENT_ERROR_255, 

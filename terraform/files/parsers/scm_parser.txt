@@ -14,7 +14,7 @@ let EventData = Event
 | project-away EventData,
     EvData;
 let SERVICE_CREATION_7045=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 7045
 | extend ServiceName = EventDetail[0]["#text"]
 | extend ImagePath = EventDetail[1]["#text"]
@@ -22,7 +22,7 @@ let processEvents = EventData
 | extend StartType = EventDetail[3]["#text"]
 | extend AccountName = EventDetail[4]["#text"]
 | project-away EventDetail;
-processEvents
+Events
 };
 SERVICE_CREATION_7045
 | project

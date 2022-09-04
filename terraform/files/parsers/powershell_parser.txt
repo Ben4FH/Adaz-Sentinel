@@ -13,7 +13,7 @@ let EventData = Event
 | project-away EventData,
     EvData;
 let POWERSHELL_PIPELINE_4103=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 4103
 | extend ContextInfo = EventDetail[0]["#text"]
 | extend Payload = EventDetail[2]["#text"]
@@ -36,10 +36,10 @@ let processEvents = EventData
 | extend ShellID = split(Lines.[15], "=").[1]
 | project-away EventDetail, Lines
 ;
-processEvents;
+Events;
 };
 let POWERSHELL_REMOTE_COMMAND_4104=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 4104
 | extend MessageNumber = EventDetail.[0].["#text"]
 | extend MessageTotal = EventDetail.[1].["#text"]
@@ -48,10 +48,10 @@ let processEvents = EventData
 | extend Path = EventDetail.[4].["#text"]
 | project-away EventDetail
 ;
-processEvents;
+Events;
 };
 let POWERSHELL_CLASSIC_START_400=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 400
 | extend Lines=split(EventDetail[2]," 	")
 | extend NewEngineState = split(Lines.[0], "=").[1]
@@ -71,10 +71,10 @@ let processEvents = EventData
 | extend CommandLine = split(Lines.[14], "=").[1]
 | project-away EventDetail, Lines
 ;
-processEvents;
+Events;
 };
 let POWERSHELL_PROVIDER_START_600=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 600
 | extend Lines=split(EventDetail[2]," 	")
 | extend ProviderName = split(Lines.[0], "=").[1]
@@ -94,7 +94,7 @@ let processEvents = EventData
 | extend CommandLine = split(Lines.[14], "=").[1]
 | project-away EventDetail, Lines
 ;
-processEvents;
+Events;
 };
 (union isfuzzy=true
 POWERSHELL_PIPELINE_4103,

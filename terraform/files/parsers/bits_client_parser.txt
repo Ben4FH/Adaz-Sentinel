@@ -13,7 +13,7 @@ let EventData = Event
 | project-away EventData,
     EvData;
 let JOB_CREATED_3=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 3
 | extend jobTitle = EventDetail[0]["#text"]
 | extend jobId = EventDetail[1]["#text"]
@@ -22,10 +22,10 @@ let processEvents = EventData
 | extend processId = EventDetail[4]["#text"]
 | extend ClientProcessStartKey = EventDetail[5]["#text"]
 | project-away EventDetail;
-processEvents;
+Events;
 };
 let JOB_COMPLETE_4=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 4
 | extend User = EventDetail[0]["#text"]
 | extend jobTitle = EventDetail[1]["#text"]
@@ -35,10 +35,10 @@ let processEvents = EventData
 | extend bytesTransferred = EventDetail[5]["#text"]
 | extend bytesTransferredFromPeer = EventDetail[6]["#text"]
 | project-away EventDetail;
-processEvents;
+Events;
 };
 let JOB_STARTED_59=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 59
 | extend transferId = EventDetail[0]["#text"]
 | extend name = EventDetail[1]["#text"]
@@ -51,10 +51,10 @@ let processEvents = EventData
 | extend bytesTransferred = EventDetail[8]["#text"]
 | extend bytesTransferredFromPeer = EventDetail[9]["#text"]
 | project-away EventDetail;
-processEvents;
+Events;
 };
 let JOB_STOPPED_60=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 60
 | extend transferId = EventDetail[0]["#text"]
 | extend name = EventDetail[1]["#text"]
@@ -74,10 +74,10 @@ let processEvents = EventData
 | extend bandwidthLimit = EventDetail[15]["#text"]
 | extend ignoreBandwidthLimitsOnLan = EventDetail[16]["#text"]
 | project-away EventDetail;
-processEvents;
+Events;
 };
 let JOB_16403=() {
-let processEvents = EventData
+let Events = EventData
 | where EventID == 16403
 | extend User = EventDetail[0]["#text"]
 | extend jobTitle = EventDetail[1]["#text"]
@@ -89,7 +89,7 @@ let processEvents = EventData
 | extend processId = EventDetail[5]["#text"]
 | extend ClientProcessStartKey = EventDetail[5]["#text"]
 | project-away EventDetail;
-processEvents;
+Events;
 };
 (union isfuzzy=true
 JOB_CREATED_3,

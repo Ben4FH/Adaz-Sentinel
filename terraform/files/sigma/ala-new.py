@@ -142,6 +142,7 @@ class AzureLogAnalyticsBackend(SingleTextQueryBackend):
                 val = re.sub('\\\\\*', '', val)
                 val = re.sub(r'\\\?', r'?', val)
                 val = re.sub('\\\\\\\\', '\\\\', val)
+                val = re.sub("'", "''", val)
                 return "%s @'%s'" % (op, val)
             elif "\\" in val:
                 return "%s @'%s'" % (op, val)
