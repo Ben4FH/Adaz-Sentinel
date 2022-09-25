@@ -5,3 +5,4 @@ msrestazure==0.6.4
 ansible==5.3.0
 azure-cli==2.33.1
 ruamel.yaml
+termcolor
